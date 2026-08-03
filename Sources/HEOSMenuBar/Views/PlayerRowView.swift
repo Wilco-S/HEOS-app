@@ -1,3 +1,4 @@
+import Foundation
 import SwiftUI
 
 struct PlayerRowView: View {
@@ -7,6 +8,7 @@ struct PlayerRowView: View {
     let onSelect: () -> Void
     let onVolumeChanged: (Int) -> Void
     let onMuteChanged: (Bool) -> Void
+    let dragProvider: () -> NSItemProvider
 
     @State private var volume: Double
 
@@ -16,7 +18,8 @@ struct PlayerRowView: View {
         isEnabled: Bool,
         onSelect: @escaping () -> Void,
         onVolumeChanged: @escaping (Int) -> Void,
-        onMuteChanged: @escaping (Bool) -> Void
+        onMuteChanged: @escaping (Bool) -> Void,
+        dragProvider: @escaping () -> NSItemProvider
     ) {
         self.player = player
         self.isSelected = isSelected
@@ -24,36 +27,48 @@ struct PlayerRowView: View {
         self.onSelect = onSelect
         self.onVolumeChanged = onVolumeChanged
         self.onMuteChanged = onMuteChanged
+        self.dragProvider = dragProvider
         _volume = State(initialValue: Double(player.volume))
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Button(action: onSelect) {
-                HStack {
-                    Image(systemName: isSelected ? "hifispeaker.2.fill" : "hifispeaker.2")
-                        .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text(player.name).fontWeight(.medium)
-                        if !player.model.isEmpty {
-                            Text(player.model).font(.caption).foregroundStyle(.secondary)
+            HStack(spacing: 8) {
+                Button(action: onSelect) {
+                    HStack {
+                        Image(systemName: isSelected ? "hifispeaker.2.fill" : "hifispeaker.2")
+                            .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(player.name).fontWeight(.medium)
+                            if !player.model.isEmpty {
+                                Text(player.model).font(.caption).foregroundStyle(.secondary)
+                            }
                         }
+                        Spacer()
                     }
-                    Spacer()
-                    if isEnabled {
-                        Text("\(Int(volume))%")
-                            .font(.caption.monospacedDigit())
-                            .foregroundStyle(.secondary)
-                    } else {
-                        Text("Uitgeschakeld")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
+                    .contentShape(Rectangle())
                 }
-                .contentShape(Rectangle())
+                .buttonStyle(.plain)
+                .disabled(!isEnabled)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                if isEnabled {
+                    Text("\(Int(volume))%")
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("Uitgeschakeld")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Image(systemName: "line.3.horizontal")
+                    .foregroundStyle(.tertiary)
+                    .frame(width: 20, height: 28)
+                    .contentShape(Rectangle())
+                    .onDrag(dragProvider)
+                    .help("Sleep om de volgorde te wijzigen")
             }
-            .buttonStyle(.plain)
-            .disabled(!isEnabled)
 
             HStack(spacing: 10) {
                 Button {

@@ -10,6 +10,7 @@ De uiteindelijke app kan:
 - JSON-antwoorden van HEOS verwerken;
 - alle spelers binnen het HEOS-systeem ophalen;
 - volume en mute per speler bedienen;
+- spelers met een drag-handle in een eigen, blijvende volgorde zetten;
 - wijzigingen vanuit andere HEOS-apps live ontvangen;
 - automatisch opnieuw verbinden;
 - instellingen bewaren;
@@ -994,6 +995,12 @@ De footer bevat:
 - een knop om de app te stoppen.
 
 Gebruik voor een SwiftUI `Settings`-scene bij voorkeur `SettingsLink`. Een oude selector zoals `showSettingsWindow:` kan in recente macOS-versies een Xcode-waarschuwing opleveren.
+
+### Spelers verslepen
+
+Iedere speler-rij heeft een drag-handle. `onDrag` maakt een `NSItemProvider` met de player-ID en bewaart welke speler wordt gesleept. Iedere rij is ook een drop target. Zodra de cursor een andere rij binnengaat, roept de `DropDelegate` het model aan om de twee posities te verwerken.
+
+De view bepaalt dus alleen **waar** de gebruiker sleept. `HEOSAppModel` bepaalt de nieuwe volgorde en bewaart de player-ID's in `UserDefaults`. Nieuwe HEOS-spelers worden onderaan toegevoegd. Omdat alleen de handle sleepbaar is, blijft de horizontale beweging van de volume-slider onafhankelijk werken.
 
 ---
 

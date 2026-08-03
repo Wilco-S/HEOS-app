@@ -63,4 +63,20 @@ final class HEOSProtocolTests: XCTestCase {
         reloadedModel.setPlayerEnabled(true, for: 42)
         XCTAssertTrue(reloadedModel.isPlayerEnabled(42))
     }
+
+    @MainActor
+    func testReordersPlayersInBothDirections() {
+        XCTAssertEqual(
+            HEOSAppModel.reorderedPlayerIDs([1, 2, 3], moving: 1, relativeTo: 3),
+            [2, 3, 1]
+        )
+        XCTAssertEqual(
+            HEOSAppModel.reorderedPlayerIDs([1, 2, 3], moving: 3, relativeTo: 1),
+            [3, 1, 2]
+        )
+        XCTAssertEqual(
+            HEOSAppModel.reorderedPlayerIDs([1, 2, 3], moving: 2, relativeTo: 2),
+            [1, 2, 3]
+        )
+    }
 }

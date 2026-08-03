@@ -9,6 +9,7 @@ A fast, native macOS menu bar controller for Denon HEOS players. Version 0.1 foc
 - Bonjour device discovery plus manual host configuration
 - Player discovery through the HEOS protocol
 - Per-player volume and mute controls
+- Drag-and-drop player ordering that persists between launches
 - Live volume/mute/player-change events
 - Automatic reconnect with exponential backoff
 - Persistent connection settings

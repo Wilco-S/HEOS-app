@@ -24,6 +24,7 @@ All notable changes to HEOS Menu Bar will be documented in this file.
 - Replaced the menu bar waveform with the clearer supplied variant.
 - Switched the application icon to the supplied `AppIcon.icns` resource.
 - Fixed the transparent menu bar icon and keep the Settings window above normal windows.
+- Added persistent drag-and-drop ordering for players in the menu bar.
 
 ## [0.1.0] - 2026-08-03
 

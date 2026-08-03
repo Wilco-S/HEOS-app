@@ -1,8 +1,10 @@
 import AppKit
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct MenuBarContentView: View {
     @EnvironmentObject private var model: HEOSAppModel
+    @State private var draggedPlayerID: Int?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -42,7 +44,19 @@ struct MenuBarContentView: View {
                             isEnabled: model.isPlayerEnabled(player.id),
                             onSelect: { model.select(player) },
                             onVolumeChanged: { model.setVolume($0, for: player.id) },
-                            onMuteChanged: { model.setMuted($0, for: player.id) }
+                            onMuteChanged: { model.setMuted($0, for: player.id) },
+                            dragProvider: {
+                                draggedPlayerID = player.id
+                                return NSItemProvider(object: String(player.id) as NSString)
+                            }
+                        )
+                        .onDrop(
+                            of: [UTType.text],
+                            delegate: PlayerReorderDropDelegate(
+                                destinationID: player.id,
+                                draggedPlayerID: $draggedPlayerID,
+                                movePlayer: model.movePlayer
+                            )
                         )
                         if player.id != model.players.last?.id { Divider() }
                     }
@@ -128,5 +142,29 @@ struct MenuBarContentView: View {
     private func openLegacySettingsWindow() {
         NSApplication.shared.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
         NSApplication.shared.activate(ignoringOtherApps: true)
+    }
+}
+
+private struct PlayerReorderDropDelegate: DropDelegate {
+    let destinationID: Int
+    @Binding var draggedPlayerID: Int?
+    let movePlayer: (Int, Int) -> Void
+
+    func validateDrop(info: DropInfo) -> Bool {
+        draggedPlayerID != nil
+    }
+
+    func dropEntered(info: DropInfo) {
+        guard let draggedPlayerID, draggedPlayerID != destinationID else { return }
+        movePlayer(draggedPlayerID, destinationID)
+    }
+
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        DropProposal(operation: .move)
+    }
+
+    func performDrop(info: DropInfo) -> Bool {
+        draggedPlayerID = nil
+        return true
     }
 }
