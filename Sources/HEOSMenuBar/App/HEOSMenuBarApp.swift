@@ -11,6 +11,10 @@ struct HEOSMenuBarApp: App {
                 .task { model.start() }
         } label: {
             Image("MenuBarIcon")
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 18, height: 18)
         }
         .menuBarExtraStyle(.window)
 

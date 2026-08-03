@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 struct SettingsView: View {
@@ -64,6 +65,7 @@ struct SettingsView: View {
         }
         .formStyle(.grouped)
         .frame(width: 520, height: 500)
+        .background(SettingsWindowConfigurator().frame(width: 0, height: 0))
     }
 
     private var connectionLabel: String {
@@ -73,5 +75,22 @@ struct SettingsView: View {
         case .connected: return "Verbonden"
         case .failed: return "Mislukt"
         }
+    }
+}
+
+private struct SettingsWindowConfigurator: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        FloatingSettingsView()
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        nsView.window?.level = .floating
+    }
+}
+
+private final class FloatingSettingsView: NSView {
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        window?.level = .floating
     }
 }
