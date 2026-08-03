@@ -39,6 +39,7 @@ struct MenuBarContentView: View {
                         PlayerRowView(
                             player: player,
                             isSelected: model.selectedPlayerID == player.id,
+                            isEnabled: model.isPlayerEnabled(player.id),
                             onSelect: { model.select(player) },
                             onVolumeChanged: { model.setVolume($0, for: player.id) },
                             onMuteChanged: { model.setMuted($0, for: player.id) }
@@ -99,7 +100,7 @@ struct MenuBarContentView: View {
     }
 
     private var emptyStateIcon: String {
-        model.connectionState == .connected ? "hifispeaker.slash" : "wifi.exclamationmark"
+        model.connectionState == .connected ? "speaker.slash.fill" : "wifi.exclamationmark"
     }
 
     private var emptyStateTitle: String {

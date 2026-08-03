@@ -1,4 +1,5 @@
 import Darwin
+import Foundation
 import XCTest
 @testable import HEOSMenuBar
 
@@ -42,5 +43,24 @@ final class HEOSProtocolTests: XCTestCase {
         let data = Data(bytes: &socketAddress, count: MemoryLayout<sockaddr_in>.size)
 
         XCTAssertEqual(HEOSDiscoveryService.ipv4Address(from: [data]), "192.168.2.6")
+    }
+
+    @MainActor
+    func testDisabledPlayersPersist() {
+        let suiteName = "HEOSAppModelTests-\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let model = HEOSAppModel(defaults: defaults)
+        XCTAssertTrue(model.isPlayerEnabled(42))
+
+        model.setPlayerEnabled(false, for: 42)
+        XCTAssertFalse(model.isPlayerEnabled(42))
+
+        let reloadedModel = HEOSAppModel(defaults: defaults)
+        XCTAssertFalse(reloadedModel.isPlayerEnabled(42))
+
+        reloadedModel.setPlayerEnabled(true, for: 42)
+        XCTAssertTrue(reloadedModel.isPlayerEnabled(42))
     }
 }

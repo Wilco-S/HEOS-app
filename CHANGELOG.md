@@ -18,6 +18,9 @@ All notable changes to HEOS Menu Bar will be documented in this file.
 - Migrated the runnable app from a package executable to a native macOS Xcode application project.
 - Added a bundle identifier, app `Info.plist`, Bonjour declaration, Local Network description, and sandbox network entitlement.
 - Added a custom waveform template icon for the menu bar and a blue waveform application icon.
+- Increased the visible size of the menu bar waveform.
+- Added persistent per-player control toggles that prevent accidental volume and mute changes.
+- Replaced an unavailable empty-state SF Symbol.
 
 ## [0.1.0] - 2026-08-03
 

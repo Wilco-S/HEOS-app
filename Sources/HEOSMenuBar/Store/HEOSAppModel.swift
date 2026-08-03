@@ -6,6 +6,7 @@ final class HEOSAppModel: ObservableObject {
     @Published private(set) var connectionState: HEOSConnectionState = .disconnected
     @Published private(set) var players: [HEOSPlayer] = []
     @Published private(set) var discoveredDevices: [HEOSDevice] = []
+    @Published private(set) var disabledPlayerIDs: Set<Int> = []
     @Published var selectedPlayerID: Int?
     @Published var lastError: String?
 
@@ -25,6 +26,7 @@ final class HEOSAppModel: ObservableObject {
         static let host = "heos.host"
         static let port = "heos.port"
         static let reconnect = "heos.reconnect"
+        static let disabledPlayers = "heos.disabledPlayers"
     }
 
     private let client: HEOSTCPClient
@@ -50,6 +52,7 @@ final class HEOSAppModel: ObservableObject {
         let savedPort = defaults.integer(forKey: Keys.port)
         self.port = savedPort == 0 ? Int(HEOSTCPClient.defaultPort) : savedPort
         self.reconnectAutomatically = defaults.object(forKey: Keys.reconnect) as? Bool ?? true
+        self.disabledPlayerIDs = Set(defaults.array(forKey: Keys.disabledPlayers) as? [Int] ?? [])
 
         client.onStateChange = { [weak self] state in self?.handle(state: state) }
         client.onResponse = { [weak self] response in self?.handle(response: response) }
@@ -64,7 +67,7 @@ final class HEOSAppModel: ObservableObject {
 
     var selectedPlayer: HEOSPlayer? {
         guard let selectedPlayerID else { return nil }
-        return players.first { $0.id == selectedPlayerID }
+        return players.first { $0.id == selectedPlayerID && isPlayerEnabled($0.id) }
     }
 
     func start() {
@@ -104,18 +107,38 @@ final class HEOSAppModel: ObservableObject {
     }
 
     func select(_ player: HEOSPlayer) {
+        guard isPlayerEnabled(player.id) else { return }
         selectedPlayerID = player.id
     }
 
     func setVolume(_ level: Int, for playerID: Int) {
+        guard isPlayerEnabled(playerID) else { return }
         let level = min(max(level, 0), 100)
         updatePlayer(playerID) { $0.volume = level }
         client.send(.setVolume(playerID: playerID, level: level))
     }
 
     func setMuted(_ muted: Bool, for playerID: Int) {
+        guard isPlayerEnabled(playerID) else { return }
         updatePlayer(playerID) { $0.isMuted = muted }
         client.send(.setMute(playerID: playerID, muted: muted))
+    }
+
+    func isPlayerEnabled(_ playerID: Int) -> Bool {
+        !disabledPlayerIDs.contains(playerID)
+    }
+
+    func setPlayerEnabled(_ enabled: Bool, for playerID: Int) {
+        if enabled {
+            disabledPlayerIDs.remove(playerID)
+        } else {
+            disabledPlayerIDs.insert(playerID)
+        }
+        defaults.set(disabledPlayerIDs.sorted(), forKey: Keys.disabledPlayers)
+
+        if selectedPlayerID == playerID, !enabled {
+            selectedPlayerID = players.first { isPlayerEnabled($0.id) }?.id
+        }
     }
 
     private func handle(state: HEOSConnectionState) {
@@ -162,8 +185,10 @@ final class HEOSAppModel: ObservableObject {
                 }
                 return player
             }
-            if selectedPlayerID == nil || !players.contains(where: { $0.id == selectedPlayerID }) {
-                selectedPlayerID = players.first?.id
+            if selectedPlayerID == nil || !players.contains(where: {
+                $0.id == selectedPlayerID && isPlayerEnabled($0.id)
+            }) {
+                selectedPlayerID = players.first { isPlayerEnabled($0.id) }?.id
             }
             players.forEach {
                 client.send(.getVolume(playerID: $0.id))

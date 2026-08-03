@@ -3,6 +3,7 @@ import SwiftUI
 struct PlayerRowView: View {
     let player: HEOSPlayer
     let isSelected: Bool
+    let isEnabled: Bool
     let onSelect: () -> Void
     let onVolumeChanged: (Int) -> Void
     let onMuteChanged: (Bool) -> Void
@@ -12,12 +13,14 @@ struct PlayerRowView: View {
     init(
         player: HEOSPlayer,
         isSelected: Bool,
+        isEnabled: Bool,
         onSelect: @escaping () -> Void,
         onVolumeChanged: @escaping (Int) -> Void,
         onMuteChanged: @escaping (Bool) -> Void
     ) {
         self.player = player
         self.isSelected = isSelected
+        self.isEnabled = isEnabled
         self.onSelect = onSelect
         self.onVolumeChanged = onVolumeChanged
         self.onMuteChanged = onMuteChanged
@@ -37,13 +40,20 @@ struct PlayerRowView: View {
                         }
                     }
                     Spacer()
-                    Text("\(Int(volume))%")
-                        .font(.caption.monospacedDigit())
-                        .foregroundStyle(.secondary)
+                    if isEnabled {
+                        Text("\(Int(volume))%")
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text("Uitgeschakeld")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .disabled(!isEnabled)
 
             HStack(spacing: 10) {
                 Button {
@@ -60,7 +70,9 @@ struct PlayerRowView: View {
                 }
                 .onChange(of: player.volume) { volume = Double($0) }
             }
+            .disabled(!isEnabled)
         }
         .padding(.vertical, 6)
+        .opacity(isEnabled ? 1 : 0.45)
     }
 }

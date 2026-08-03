@@ -22,6 +22,28 @@ struct SettingsView: View {
                 }
             }
 
+            if !model.players.isEmpty {
+                Section {
+                    ForEach(model.players) { player in
+                        Toggle(isOn: Binding(
+                            get: { model.isPlayerEnabled(player.id) },
+                            set: { model.setPlayerEnabled($0, for: player.id) }
+                        )) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(player.name)
+                                if !player.model.isEmpty {
+                                    Text(player.model).font(.caption).foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Bedienbare spelers")
+                } footer: {
+                    Text("Uitgeschakelde spelers blijven gewoon werken in HEOS en andere apps, maar kunnen vanuit deze app niet worden bediend.")
+                }
+            }
+
             if !model.discoveredDevices.isEmpty {
                 Section("Gevonden apparaten") {
                     ForEach(model.discoveredDevices) { device in
@@ -41,7 +63,7 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 480, height: 310)
+        .frame(width: 520, height: 500)
     }
 
     private var connectionLabel: String {
