@@ -21,14 +21,14 @@ A fast, native macOS menu bar controller for Denon HEOS players. Version 0.1 foc
 
 ## Run
 
-Clone the repository and open `Package.swift` in Xcode. Select the **HEOSMenuBar** scheme and press Run.
+Clone the repository and open **`HEOSMenuBar.xcodeproj`** in Xcode. Select the **HEOSMenuBar** scheme, choose **My Mac**, and press Run.
 
-You can also build and test from Terminal:
+On first launch, allow Local Network access when macOS asks. The app is a regular signed macOS `.app` bundle with the required Bonjour declaration and network-client entitlement.
+
+`Package.swift` remains available for command-line protocol tests:
 
 ```sh
-swift build
 swift test
-swift run HEOSMenuBar
 ```
 
 The first launch may trigger macOS's Local Network permission prompt. If automatic discovery does not find a device, open **Settings…** and enter the IP address of any HEOS player or receiver. One connection can enumerate all players in the HEOS system.
@@ -36,6 +36,8 @@ The first launch may trigger macOS's Local Network permission prompt. If automat
 ## Project structure
 
 ```text
+HEOSMenuBar.xcodeproj/  Native macOS application project
+Config/                Info.plist and sandbox entitlements
 Sources/HEOSMenuBar/
 ├── App/          App entry point and menu bar scene
 ├── Models/       Player and device models
@@ -44,6 +46,7 @@ Sources/HEOSMenuBar/
 ├── Services/     Bonjour discovery
 ├── Store/        Application state and reconnect logic
 └── Views/        SwiftUI menu and settings views
+Tests/                 Swift Package protocol tests
 ```
 
 ## HEOS protocol

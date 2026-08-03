@@ -1,0 +1,255 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A00000000000000000000001 /* HEOSMenuBarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000001 /* HEOSMenuBarApp.swift */; };
+		A00000000000000000000002 /* HEOSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000002 /* HEOSPlayer.swift */; };
+		A00000000000000000000003 /* HEOSTCPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000003 /* HEOSTCPClient.swift */; };
+		A00000000000000000000004 /* HEOSCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000004 /* HEOSCommand.swift */; };
+		A00000000000000000000005 /* HEOSResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000005 /* HEOSResponse.swift */; };
+		A00000000000000000000006 /* JSONValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000006 /* JSONValue.swift */; };
+		A00000000000000000000007 /* HEOSDiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000007 /* HEOSDiscoveryService.swift */; };
+		A00000000000000000000008 /* HEOSAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000008 /* HEOSAppModel.swift */; };
+		A00000000000000000000009 /* MenuBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000009 /* MenuBarContentView.swift */; };
+		A0000000000000000000000A /* PlayerRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000A /* PlayerRowView.swift */; };
+		A0000000000000000000000B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000B /* SettingsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B00000000000000000000001 /* HEOSMenuBarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HEOSMenuBarApp.swift; sourceTree = "<group>"; };
+		B00000000000000000000002 /* HEOSPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HEOSPlayer.swift; sourceTree = "<group>"; };
+		B00000000000000000000003 /* HEOSTCPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HEOSTCPClient.swift; sourceTree = "<group>"; };
+		B00000000000000000000004 /* HEOSCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HEOSCommand.swift; sourceTree = "<group>"; };
+		B00000000000000000000005 /* HEOSResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HEOSResponse.swift; sourceTree = "<group>"; };
+		B00000000000000000000006 /* JSONValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONValue.swift; sourceTree = "<group>"; };
+		B00000000000000000000007 /* HEOSDiscoveryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HEOSDiscoveryService.swift; sourceTree = "<group>"; };
+		B00000000000000000000008 /* HEOSAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HEOSAppModel.swift; sourceTree = "<group>"; };
+		B00000000000000000000009 /* MenuBarContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarContentView.swift; sourceTree = "<group>"; };
+		B0000000000000000000000A /* PlayerRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRowView.swift; sourceTree = "<group>"; };
+		B0000000000000000000000B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B00000000000000000000100 /* HEOSMenuBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HEOSMenuBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B00000000000000000000101 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B00000000000000000000102 /* HEOSMenuBar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HEOSMenuBar.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D00000000000000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C00000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				C00000000000000000000002 /* HEOSMenuBar */,
+				C0000000000000000000000B /* Config */,
+				C0000000000000000000000A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C00000000000000000000002 /* HEOSMenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				C00000000000000000000003 /* App */,
+				C00000000000000000000004 /* Models */,
+				C00000000000000000000005 /* Networking */,
+				C00000000000000000000006 /* Protocol */,
+				C00000000000000000000007 /* Services */,
+				C00000000000000000000008 /* Store */,
+				C00000000000000000000009 /* Views */,
+			);
+			name = HEOSMenuBar;
+			path = Sources/HEOSMenuBar;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000003 /* App */ = {isa = PBXGroup; children = (B00000000000000000000001 /* HEOSMenuBarApp.swift */,); path = App; sourceTree = "<group>"; };
+		C00000000000000000000004 /* Models */ = {isa = PBXGroup; children = (B00000000000000000000002 /* HEOSPlayer.swift */,); path = Models; sourceTree = "<group>"; };
+		C00000000000000000000005 /* Networking */ = {isa = PBXGroup; children = (B00000000000000000000003 /* HEOSTCPClient.swift */,); path = Networking; sourceTree = "<group>"; };
+		C00000000000000000000006 /* Protocol */ = {isa = PBXGroup; children = (B00000000000000000000004 /* HEOSCommand.swift */, B00000000000000000000005 /* HEOSResponse.swift */, B00000000000000000000006 /* JSONValue.swift */,); path = Protocol; sourceTree = "<group>"; };
+		C00000000000000000000007 /* Services */ = {isa = PBXGroup; children = (B00000000000000000000007 /* HEOSDiscoveryService.swift */,); path = Services; sourceTree = "<group>"; };
+		C00000000000000000000008 /* Store */ = {isa = PBXGroup; children = (B00000000000000000000008 /* HEOSAppModel.swift */,); path = Store; sourceTree = "<group>"; };
+		C00000000000000000000009 /* Views */ = {isa = PBXGroup; children = (B00000000000000000000009 /* MenuBarContentView.swift */, B0000000000000000000000A /* PlayerRowView.swift */, B0000000000000000000000B /* SettingsView.swift */,); path = Views; sourceTree = "<group>"; };
+		C0000000000000000000000A /* Products */ = {
+			isa = PBXGroup;
+			children = (B00000000000000000000100 /* HEOSMenuBar.app */,);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C0000000000000000000000B /* Config */ = {
+			isa = PBXGroup;
+			children = (B00000000000000000000101 /* Info.plist */, B00000000000000000000102 /* HEOSMenuBar.entitlements */,);
+			path = Config;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E00000000000000000000001 /* HEOSMenuBar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = I00000000000000000000002 /* Build configuration list for PBXNativeTarget "HEOSMenuBar" */;
+			buildPhases = (
+				D00000000000000000000001 /* Sources */,
+				D00000000000000000000002 /* Frameworks */,
+				D00000000000000000000003 /* Resources */,
+			);
+			buildRules = ();
+			dependencies = ();
+			name = HEOSMenuBar;
+			productName = HEOSMenuBar;
+			productReference = B00000000000000000000100 /* HEOSMenuBar.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F00000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2630;
+				TargetAttributes = {
+					E00000000000000000000001 = {CreatedOnToolsVersion = 26.3; };
+				};
+			};
+			buildConfigurationList = I00000000000000000000001 /* Build configuration list for PBXProject "HEOSMenuBar" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base,);
+			mainGroup = C00000000000000000000001;
+			productRefGroup = C0000000000000000000000A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (E00000000000000000000001 /* HEOSMenuBar */,);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D00000000000000000000003 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D00000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A00000000000000000000001 /* HEOSMenuBarApp.swift in Sources */,
+				A00000000000000000000002 /* HEOSPlayer.swift in Sources */,
+				A00000000000000000000003 /* HEOSTCPClient.swift in Sources */,
+				A00000000000000000000004 /* HEOSCommand.swift in Sources */,
+				A00000000000000000000005 /* HEOSResponse.swift in Sources */,
+				A00000000000000000000006 /* JSONValue.swift in Sources */,
+				A00000000000000000000007 /* HEOSDiscoveryService.swift in Sources */,
+				A00000000000000000000008 /* HEOSAppModel.swift in Sources */,
+				A00000000000000000000009 /* MenuBarContentView.swift in Sources */,
+				A0000000000000000000000A /* PlayerRowView.swift in Sources */,
+				A0000000000000000000000B /* SettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		G00000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		G00000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		H00000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Config/HEOSMenuBar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Config/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MARKETING_VERSION = 0.1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wilcos.HEOSMenuBar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		H00000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Config/HEOSMenuBar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Config/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MARKETING_VERSION = 0.1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wilcos.HEOSMenuBar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		I00000000000000000000001 /* Build configuration list for PBXProject "HEOSMenuBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (G00000000000000000000001 /* Debug */, G00000000000000000000002 /* Release */,);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		I00000000000000000000002 /* Build configuration list for PBXNativeTarget "HEOSMenuBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (H00000000000000000000001 /* Debug */, H00000000000000000000002 /* Release */,);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F00000000000000000000001 /* Project object */;
+}

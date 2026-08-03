@@ -13,6 +13,11 @@ All notable changes to HEOS Menu Bar will be documented in this file.
 - Clear invalid Bonjour service names saved as hostnames by version 0.1.0.
 - Prefer the resolved HEOS IPv4 address to avoid `.local` connections choosing an unreachable interface.
 
+### Changed
+
+- Migrated the runnable app from a package executable to a native macOS Xcode application project.
+- Added a bundle identifier, app `Info.plist`, Bonjour declaration, Local Network description, and sandbox network entitlement.
+
 ## [0.1.0] - 2026-08-03
 
 ### Added
