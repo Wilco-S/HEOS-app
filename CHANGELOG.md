@@ -21,6 +21,8 @@ All notable changes to HEOS Menu Bar will be documented in this file.
 - Increased the visible size of the menu bar waveform.
 - Added persistent per-player control toggles that prevent accidental volume and mute changes.
 - Replaced an unavailable empty-state SF Symbol.
+- Replaced the menu bar waveform with the clearer supplied variant.
+- Switched the application icon to the supplied `AppIcon.icns` resource.
 
 ## [0.1.0] - 2026-08-03
 
