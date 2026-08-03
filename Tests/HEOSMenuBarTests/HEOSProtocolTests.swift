@@ -1,3 +1,4 @@
+import Darwin
 import XCTest
 @testable import HEOSMenuBar
 
@@ -31,5 +32,15 @@ final class HEOSProtocolTests: XCTestCase {
         )
         XCTAssertEqual(String(data: HEOSCommand.setMute(playerID: 7, muted: true).data, encoding: .utf8),
                        "heos://player/set_mute?pid=7&state=on\r\n")
+    }
+
+    func testDiscoveryExtractsIPv4Address() {
+        var socketAddress = sockaddr_in()
+        socketAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        socketAddress.sin_family = sa_family_t(AF_INET)
+        inet_pton(AF_INET, "192.168.2.6", &socketAddress.sin_addr)
+        let data = Data(bytes: &socketAddress, count: MemoryLayout<sockaddr_in>.size)
+
+        XCTAssertEqual(HEOSDiscoveryService.ipv4Address(from: [data]), "192.168.2.6")
     }
 }

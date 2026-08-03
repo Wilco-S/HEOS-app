@@ -55,7 +55,8 @@ final class HEOSAppModel: ObservableObject {
         client.onResponse = { [weak self] response in self?.handle(response: response) }
         discovery.onDevicesChanged = { [weak self] devices in
             self?.discoveredDevices = devices
-            if self?.host.isEmpty == true, let device = devices.first {
+            let shouldReplaceLegacyHost = self?.host.lowercased().hasSuffix(".local") == true
+            if (self?.host.isEmpty == true || shouldReplaceLegacyHost), let device = devices.first {
                 self?.connect(to: device)
             }
         }
