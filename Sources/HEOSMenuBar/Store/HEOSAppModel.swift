@@ -43,7 +43,10 @@ final class HEOSAppModel: ObservableObject {
         self.client = client
         self.discovery = discovery
         self.defaults = defaults
-        self.host = defaults.string(forKey: Keys.host) ?? ""
+        let savedHost = defaults.string(forKey: Keys.host) ?? ""
+        // Versions before 0.1.1 saved the Bonjour service name as a host
+        // (for example `HEOS Bar.local`). DNS hostnames cannot contain spaces.
+        self.host = savedHost.contains(where: \.isWhitespace) ? "" : savedHost
         let savedPort = defaults.integer(forKey: Keys.port)
         self.port = savedPort == 0 ? Int(HEOSTCPClient.defaultPort) : savedPort
         self.reconnectAutomatically = defaults.object(forKey: Keys.reconnect) as? Bool ?? true

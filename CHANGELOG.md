@@ -10,6 +10,7 @@ All notable changes to HEOS Menu Bar will be documented in this file.
 - Allow entering a HEOS IP address directly from the disconnected menu.
 - Stop stalled TCP connection attempts after eight seconds with an actionable error.
 - Resolve the Bonjour host but connect to the HEOS CLI on port 1255 instead of the advertised communications port.
+- Clear invalid Bonjour service names saved as hostnames by version 0.1.0.
 
 ## [0.1.0] - 2026-08-03
 
