@@ -1,0 +1,66 @@
+import Darwin
+import Foundation
+import XCTest
+@testable import HEOSMenuBar
+
+final class HEOSProtocolTests: XCTestCase {
+    func testDecodesPlayersResponse() throws {
+        let json = #"{"heos":{"command":"player/get_players","result":"success","message":""},"payload":[{"name":"Woonkamer","pid":"1","model":"HEOS 5","version":"3.34","ip":"192.168.1.20","network":"wired","lineout":"0"}]}"#
+        let response = try HEOSResponse.decode(line: Data(json.utf8))
+
+        XCTAssertTrue(response.heos.succeeded)
+        XCTAssertEqual(response.payloadObjects.count, 1)
+        let player = try XCTUnwrap(HEOSPlayer(payload: response.payloadObjects[0]))
+        XCTAssertEqual(player.id, 1)
+        XCTAssertEqual(player.name, "Woonkamer")
+        XCTAssertEqual(player.ipAddress, "192.168.1.20")
+    }
+
+    func testParsesMessageFieldsAndPercentEncoding() throws {
+        let json = #"{"heos":{"command":"event/player_volume_changed","result":"success","message":"pid=42&name=Living%20Room&level=37&mute=off"}}"#
+        let response = try HEOSResponse.decode(line: Data(json.utf8))
+
+        XCTAssertEqual(response.heos.fields["pid"], "42")
+        XCTAssertEqual(response.heos.fields["name"], "Living Room")
+        XCTAssertEqual(response.heos.fields["level"], "37")
+    }
+
+    func testCommandsUseCRLFAndClampVolume() {
+        XCTAssertEqual(HEOSCommand.getPlayers.wireValue, "heos://player/get_players")
+        XCTAssertEqual(
+            HEOSCommand.setVolume(playerID: 7, level: 140).wireValue,
+            "heos://player/set_volume?pid=7&level=100"
+        )
+        XCTAssertEqual(String(data: HEOSCommand.setMute(playerID: 7, muted: true).data, encoding: .utf8),
+                       "heos://player/set_mute?pid=7&state=on\r\n")
+    }
+
+    func testDiscoveryExtractsIPv4Address() {
+        var socketAddress = sockaddr_in()
+        socketAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        socketAddress.sin_family = sa_family_t(AF_INET)
+        inet_pton(AF_INET, "192.168.2.6", &socketAddress.sin_addr)
+        let data = Data(bytes: &socketAddress, count: MemoryLayout<sockaddr_in>.size)
+
+        XCTAssertEqual(HEOSDiscoveryService.ipv4Address(from: [data]), "192.168.2.6")
+    }
+
+    @MainActor
+    func testDisabledPlayersPersist() {
+        let suiteName = "HEOSAppModelTests-\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+
+        let model = HEOSAppModel(defaults: defaults)
+        XCTAssertTrue(model.isPlayerEnabled(42))
+
+        model.setPlayerEnabled(false, for: 42)
+        XCTAssertFalse(model.isPlayerEnabled(42))
+
+        let reloadedModel = HEOSAppModel(defaults: defaults)
+        XCTAssertFalse(reloadedModel.isPlayerEnabled(42))
+
+        reloadedModel.setPlayerEnabled(true, for: 42)
+        XCTAssertTrue(reloadedModel.isPlayerEnabled(42))
+    }
+}
