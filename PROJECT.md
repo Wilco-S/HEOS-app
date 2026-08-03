@@ -998,7 +998,9 @@ Gebruik voor een SwiftUI `Settings`-scene bij voorkeur `SettingsLink`. Een oude 
 
 ### Spelers verslepen
 
-Iedere speler-rij heeft een drag-handle. `onDrag` maakt een `NSItemProvider` met de player-ID en bewaart welke speler wordt gesleept. Iedere rij is ook een drop target. Zodra de cursor een andere rij binnengaat, roept de `DropDelegate` het model aan om de twee posities te verwerken.
+Iedere speler-rij heeft een drag-handle met een directe `DragGesture`. Het systeemdragmechanisme met `NSItemProvider` is hier bewust niet gebruikt, omdat een systeemdrag binnen het speciale `MenuBarExtra`-venster niet betrouwbaar wordt gestart. De gesture rapporteert de verticale cursorpositie in de benoemde coordinate space `playerList`.
+
+Iedere rij publiceert via een `PreferenceKey` zijn actuele frame. De hoofdview vergelijkt de cursorpositie met de middelpunten van die frames. Zodra de cursor het gebied van een andere speler bereikt, roept de view het model aan om de volgorde aan te passen. Een laatst-verwerkte target-ID voorkomt dat opeenvolgende gesture-events dezelfde verplaatsing onmiddellijk terugdraaien.
 
 De view bepaalt dus alleen **waar** de gebruiker sleept. `HEOSAppModel` bepaalt de nieuwe volgorde en bewaart de player-ID's in `UserDefaults`. Nieuwe HEOS-spelers worden onderaan toegevoegd. Omdat alleen de handle sleepbaar is, blijft de horizontale beweging van de volume-slider onafhankelijk werken.
 

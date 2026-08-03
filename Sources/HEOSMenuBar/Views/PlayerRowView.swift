@@ -1,4 +1,3 @@
-import Foundation
 import SwiftUI
 
 struct PlayerRowView: View {
@@ -8,7 +7,9 @@ struct PlayerRowView: View {
     let onSelect: () -> Void
     let onVolumeChanged: (Int) -> Void
     let onMuteChanged: (Bool) -> Void
-    let dragProvider: () -> NSItemProvider
+    let isReordering: Bool
+    let onReorderChanged: (CGFloat) -> Void
+    let onReorderEnded: () -> Void
 
     @State private var volume: Double
 
@@ -19,7 +20,9 @@ struct PlayerRowView: View {
         onSelect: @escaping () -> Void,
         onVolumeChanged: @escaping (Int) -> Void,
         onMuteChanged: @escaping (Bool) -> Void,
-        dragProvider: @escaping () -> NSItemProvider
+        isReordering: Bool,
+        onReorderChanged: @escaping (CGFloat) -> Void,
+        onReorderEnded: @escaping () -> Void
     ) {
         self.player = player
         self.isSelected = isSelected
@@ -27,7 +30,9 @@ struct PlayerRowView: View {
         self.onSelect = onSelect
         self.onVolumeChanged = onVolumeChanged
         self.onMuteChanged = onMuteChanged
-        self.dragProvider = dragProvider
+        self.isReordering = isReordering
+        self.onReorderChanged = onReorderChanged
+        self.onReorderEnded = onReorderEnded
         _volume = State(initialValue: Double(player.volume))
     }
 
@@ -63,10 +68,14 @@ struct PlayerRowView: View {
                 }
 
                 Image(systemName: "line.3.horizontal")
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(isReordering ? Color.accentColor : Color.secondary)
                     .frame(width: 20, height: 28)
                     .contentShape(Rectangle())
-                    .onDrag(dragProvider)
+                    .highPriorityGesture(
+                        DragGesture(minimumDistance: 2, coordinateSpace: .named("playerList"))
+                            .onChanged { onReorderChanged($0.location.y) }
+                            .onEnded { _ in onReorderEnded() }
+                    )
                     .help("Sleep om de volgorde te wijzigen")
             }
 
@@ -88,6 +97,8 @@ struct PlayerRowView: View {
             .disabled(!isEnabled)
         }
         .padding(.vertical, 6)
+        .background(isReordering ? Color.accentColor.opacity(0.08) : Color.clear)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
         .opacity(isEnabled ? 1 : 0.45)
     }
 }
