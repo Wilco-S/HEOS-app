@@ -10,7 +10,7 @@ struct HEOSMenuBarApp: App {
                 .environmentObject(model)
                 .task { model.start() }
         } label: {
-            Image(systemName: menuBarIcon)
+            Image("MenuBarIcon")
         }
         .menuBarExtraStyle(.window)
 
@@ -19,7 +19,4 @@ struct HEOSMenuBarApp: App {
         }
     }
 
-    private var menuBarIcon: String {
-        model.connectionState == .connected ? "hifispeaker.2.fill" : "hifispeaker.2"
-    }
 }

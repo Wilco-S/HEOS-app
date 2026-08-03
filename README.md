@@ -38,6 +38,7 @@ The first launch may trigger macOS's Local Network permission prompt. If automat
 ```text
 HEOSMenuBar.xcodeproj/  Native macOS application project
 Config/                Info.plist and sandbox entitlements
+Resources/             App icon and menu bar image assets
 Sources/HEOSMenuBar/
 ├── App/          App entry point and menu bar scene
 ├── Models/       Player and device models

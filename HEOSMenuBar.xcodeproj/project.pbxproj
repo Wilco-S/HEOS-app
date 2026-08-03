@@ -18,6 +18,7 @@
 		A00000000000000000000009 /* MenuBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000009 /* MenuBarContentView.swift */; };
 		A0000000000000000000000A /* PlayerRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000A /* PlayerRowView.swift */; };
 		A0000000000000000000000B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000B /* SettingsView.swift */; };
+		A0000000000000000000000C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000C /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		B00000000000000000000009 /* MenuBarContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarContentView.swift; sourceTree = "<group>"; };
 		B0000000000000000000000A /* PlayerRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRowView.swift; sourceTree = "<group>"; };
 		B0000000000000000000000B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B0000000000000000000000C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B00000000000000000000100 /* HEOSMenuBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HEOSMenuBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B00000000000000000000101 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B00000000000000000000102 /* HEOSMenuBar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HEOSMenuBar.entitlements; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 			children = (
 				C00000000000000000000002 /* HEOSMenuBar */,
 				C0000000000000000000000B /* Config */,
+				C0000000000000000000000C /* Resources */,
 				C0000000000000000000000A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -89,6 +92,12 @@
 			isa = PBXGroup;
 			children = (B00000000000000000000101 /* Info.plist */, B00000000000000000000102 /* HEOSMenuBar.entitlements */,);
 			path = Config;
+			sourceTree = "<group>";
+		};
+		C0000000000000000000000C /* Resources */ = {
+			isa = PBXGroup;
+			children = (B0000000000000000000000C /* Assets.xcassets */,);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -136,7 +145,7 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		D00000000000000000000003 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		D00000000000000000000003 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (A0000000000000000000000C /* Assets.xcassets in Resources */,); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -199,6 +208,7 @@
 		H00000000000000000000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Config/HEOSMenuBar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -218,6 +228,7 @@
 		H00000000000000000000002 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Config/HEOSMenuBar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
