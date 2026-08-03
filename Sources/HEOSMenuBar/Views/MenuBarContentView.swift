@@ -56,13 +56,18 @@ struct MenuBarContentView: View {
                 if let error = model.lastError {
                     Text(error).font(.caption).foregroundStyle(.secondary).multilineTextAlignment(.center)
                 }
+                if model.host.isEmpty {
+                    TextField("IP-adres van HEOS-apparaat", text: $model.host)
+                        .textFieldStyle(.roundedBorder)
+                        .frame(width: 230)
+                        .onSubmit { model.connect() }
+                }
                 Button(model.connectionState == .connecting ? "Verbinden…" : "Verbinden") {
                     model.connect()
                 }
                 .disabled(model.connectionState == .connecting || model.host.isEmpty)
                 if model.host.isEmpty {
-                    Button("Configureer HEOS…") { openSettingsWindow() }
-                        .buttonStyle(.link)
+                    configurationLink
                 }
             }
             .frame(maxWidth: .infinity, minHeight: 180)
@@ -72,7 +77,7 @@ struct MenuBarContentView: View {
 
     private var footer: some View {
         HStack {
-            Button("Instellingen…") { openSettingsWindow() }.buttonStyle(.plain)
+            settingsLink
             Spacer()
             Button("Stop HEOS") { NSApplication.shared.terminate(nil) }.buttonStyle(.plain)
         }
@@ -101,7 +106,25 @@ struct MenuBarContentView: View {
         model.connectionState == .connected ? "Geen spelers gevonden" : "Geen HEOS-verbinding"
     }
 
-    private func openSettingsWindow() {
+    @ViewBuilder
+    private var configurationLink: some View {
+        if #available(macOS 14.0, *) {
+            SettingsLink { Text("Configureer HEOS…") }.buttonStyle(.link)
+        } else {
+            Button("Configureer HEOS…") { openLegacySettingsWindow() }.buttonStyle(.link)
+        }
+    }
+
+    @ViewBuilder
+    private var settingsLink: some View {
+        if #available(macOS 14.0, *) {
+            SettingsLink { Text("Instellingen…") }.buttonStyle(.plain)
+        } else {
+            Button("Instellingen…") { openLegacySettingsWindow() }.buttonStyle(.plain)
+        }
+    }
+
+    private func openLegacySettingsWindow() {
         NSApplication.shared.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
         NSApplication.shared.activate(ignoringOtherApps: true)
     }

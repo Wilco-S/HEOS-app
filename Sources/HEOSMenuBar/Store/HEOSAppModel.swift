@@ -1,6 +1,5 @@
 import Combine
 import Foundation
-@preconcurrency import Network
 
 @MainActor
 final class HEOSAppModel: ObservableObject {
@@ -13,7 +12,6 @@ final class HEOSAppModel: ObservableObject {
     @Published var host: String {
         didSet {
             defaults.set(host, forKey: Keys.host)
-            if host != oldValue { discoveredEndpoint = nil }
         }
     }
     @Published var port: Int {
@@ -35,7 +33,6 @@ final class HEOSAppModel: ObservableObject {
     private var reconnectTask: Task<Void, Never>?
     private var reconnectAttempt = 0
     private var userDisconnected = false
-    private var discoveredEndpoint: NWEndpoint?
     private var hasStarted = false
 
     init(
@@ -81,17 +78,12 @@ final class HEOSAppModel: ObservableObject {
         }
         userDisconnected = false
         reconnectTask?.cancel()
-        if let discoveredEndpoint {
-            client.connect(endpoint: discoveredEndpoint)
-        } else {
-            client.connect(host: cleanHost, port: UInt16(clamping: port))
-        }
+        client.connect(host: cleanHost, port: UInt16(clamping: port))
     }
 
     func connect(to device: HEOSDevice) {
         host = device.host
         port = Int(device.port)
-        discoveredEndpoint = device.endpoint
         connect()
     }
 

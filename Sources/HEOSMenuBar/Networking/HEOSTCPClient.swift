@@ -16,6 +16,7 @@ final class HEOSTCPClient: @unchecked Sendable {
 
     private let queue = DispatchQueue(label: "app.heos.tcp", qos: .userInitiated)
     private var connection: NWConnection?
+    private var connectionTimeout: DispatchWorkItem?
     private var receiveBuffer = Data()
 
     func connect(host: String, port: UInt16 = defaultPort) {
@@ -27,11 +28,8 @@ final class HEOSTCPClient: @unchecked Sendable {
         start(NWConnection(host: NWEndpoint.Host(host), port: nwPort, using: .tcp))
     }
 
-    func connect(endpoint: NWEndpoint) {
-        start(NWConnection(to: endpoint, using: .tcp))
-    }
-
     private func start(_ newConnection: NWConnection) {
+        connectionTimeout?.cancel()
         connection?.stateUpdateHandler = nil
         connection?.cancel()
         receiveBuffer.removeAll(keepingCapacity: false)
@@ -42,21 +40,36 @@ final class HEOSTCPClient: @unchecked Sendable {
             guard let self, newConnection === self.connection else { return }
             switch state {
             case .ready:
+                self.connectionTimeout?.cancel()
                 self.publish(state: .connected)
                 self.receiveNext()
             case .failed(let error):
+                self.connectionTimeout?.cancel()
                 self.publish(state: .failed(error.localizedDescription))
                 self.connection = nil
             case .cancelled:
+                self.connectionTimeout?.cancel()
                 self.publish(state: .disconnected)
             default:
                 break
             }
         }
         newConnection.start(queue: queue)
+
+        let timeout = DispatchWorkItem { [weak self, weak newConnection] in
+            guard let self, newConnection === self.connection else { return }
+            newConnection?.stateUpdateHandler = nil
+            newConnection?.cancel()
+            self.connection = nil
+            self.publish(state: .failed("Verbinding time-out. Controleer het IP-adres en poort 1255."))
+        }
+        connectionTimeout = timeout
+        queue.asyncAfter(deadline: .now() + 8, execute: timeout)
     }
 
     func disconnect() {
+        connectionTimeout?.cancel()
+        connectionTimeout = nil
         connection?.stateUpdateHandler = nil
         connection?.cancel()
         connection = nil
