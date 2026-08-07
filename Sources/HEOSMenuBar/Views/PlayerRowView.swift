@@ -89,10 +89,32 @@ struct PlayerRowView: View {
                 .buttonStyle(.borderless)
                 .help(player.isMuted ? "Geluid aan" : "Dempen")
 
+                Button {
+                    adjustVolume(by: -1)
+                } label: {
+                    Image(systemName: "minus")
+                        .font(.caption.bold())
+                        .frame(width: 18, height: 18)
+                }
+                .buttonStyle(.borderless)
+                .disabled(volume <= 0)
+                .help("Volume 1% zachter")
+
                 Slider(value: $volume, in: 0...100, step: 1) { editing in
                     if !editing { onVolumeChanged(Int(volume)) }
                 }
                 .onChange(of: player.volume) { volume = Double($0) }
+
+                Button {
+                    adjustVolume(by: 1)
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.caption.bold())
+                        .frame(width: 18, height: 18)
+                }
+                .buttonStyle(.borderless)
+                .disabled(volume >= 100)
+                .help("Volume 1% harder")
             }
             .disabled(!isEnabled)
         }
@@ -100,5 +122,12 @@ struct PlayerRowView: View {
         .background(isReordering ? Color.accentColor.opacity(0.08) : Color.clear)
         .clipShape(RoundedRectangle(cornerRadius: 6))
         .opacity(isEnabled ? 1 : 0.45)
+    }
+
+    private func adjustVolume(by change: Int) {
+        let adjustedVolume = min(max(Int(volume) + change, 0), 100)
+        guard adjustedVolume != Int(volume) else { return }
+        volume = Double(adjustedVolume)
+        onVolumeChanged(adjustedVolume)
     }
 }

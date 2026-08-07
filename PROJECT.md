@@ -1041,6 +1041,8 @@ Slider(value: $volume, in: 0...100, step: 1) { editing in
 
 Dit voorkomt tientallen netwerkcommando's tijdens één sleepbeweging.
 
+Voor nauwkeurige aanpassingen staan rond de slider een min- en plusknop. Iedere klik berekent lokaal exact één procentpunt verschil, begrenst het resultaat op 0–100, werkt de slider meteen bij en roept daarna dezelfde `onVolumeChanged`-closure aan. Daardoor gebruiken slider en stapknoppen uiteindelijk hetzelfde veilige pad via `HEOSAppModel` en `HEOSCommand`.
+
 Wanneer HEOS extern een nieuw volume meldt, synchroniseert:
 
 ```swift

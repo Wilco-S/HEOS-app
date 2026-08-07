@@ -8,7 +8,7 @@ A fast, native macOS menu bar controller for Denon HEOS players. Version 0.1 foc
 - HEOS CLI connection over TCP (port 1255)
 - Bonjour device discovery plus manual host configuration
 - Player discovery through the HEOS protocol
-- Per-player volume and mute controls
+- Per-player volume, 1% step buttons, and mute controls
 - Drag-and-drop player ordering that persists between launches
 - Live volume/mute/player-change events
 - Automatic reconnect with exponential backoff

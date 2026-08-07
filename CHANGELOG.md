@@ -26,6 +26,7 @@ All notable changes to HEOS Menu Bar will be documented in this file.
 - Fixed the transparent menu bar icon and keep the Settings window above normal windows.
 - Added persistent drag-and-drop ordering for players in the menu bar.
 - Replaced system drag-and-drop with a direct drag gesture that works inside `MenuBarExtra`.
+- Added minus and plus buttons for precise 1% per-click volume adjustments.
 
 ## [0.1.0] - 2026-08-03
 
