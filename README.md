@@ -8,7 +8,8 @@ A fast, native macOS menu bar controller for Denon HEOS players. Version 0.1 foc
 - HEOS CLI connection over TCP (port 1255)
 - Bonjour device discovery plus manual host configuration
 - Player discovery through the HEOS protocol
-- Per-player volume and mute controls
+- Per-player volume, 1% step buttons, and mute controls
+- Drag-and-drop player ordering that persists between launches
 - Live volume/mute/player-change events
 - Automatic reconnect with exponential backoff
 - Persistent connection settings
@@ -32,6 +33,10 @@ swift test
 ```
 
 The first launch may trigger macOS's Local Network permission prompt. If automatic discovery does not find a device, open **Settings…** and enter the IP address of any HEOS player or receiver. One connection can enumerate all players in the HEOS system.
+
+## Learn how it works
+
+See [PROJECT.md](PROJECT.md) for a complete Dutch, step-by-step guide to building this app from an empty Xcode project. It explains the Xcode project model, SwiftUI views and state, the HEOS TCP protocol, JSON parsing, Bonjour discovery, sandbox permissions, settings, icons, testing, debugging, and Git.
 
 ## Project structure
 

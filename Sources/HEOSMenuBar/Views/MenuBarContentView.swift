@@ -3,6 +3,9 @@ import SwiftUI
 
 struct MenuBarContentView: View {
     @EnvironmentObject private var model: HEOSAppModel
+    @State private var draggedPlayerID: Int?
+    @State private var lastReorderTargetID: Int?
+    @State private var playerFrames: [Int: CGRect] = [:]
 
     var body: some View {
         VStack(spacing: 0) {
@@ -42,13 +45,28 @@ struct MenuBarContentView: View {
                             isEnabled: model.isPlayerEnabled(player.id),
                             onSelect: { model.select(player) },
                             onVolumeChanged: { model.setVolume($0, for: player.id) },
-                            onMuteChanged: { model.setMuted($0, for: player.id) }
+                            onMuteChanged: { model.setMuted($0, for: player.id) },
+                            isReordering: draggedPlayerID == player.id,
+                            onReorderChanged: { locationY in
+                                reorderPlayer(player.id, at: locationY)
+                            },
+                            onReorderEnded: finishReordering
                         )
+                        .background {
+                            GeometryReader { proxy in
+                                Color.clear.preference(
+                                    key: PlayerFramePreferenceKey.self,
+                                    value: [player.id: proxy.frame(in: .named("playerList"))]
+                                )
+                            }
+                        }
                         if player.id != model.players.last?.id { Divider() }
                     }
                 }
                 .padding(.horizontal, 12)
             }
+            .coordinateSpace(name: "playerList")
+            .onPreferenceChange(PlayerFramePreferenceKey.self) { playerFrames = $0 }
             .frame(maxHeight: 420)
         } else {
             VStack(spacing: 10) {
@@ -128,5 +146,38 @@ struct MenuBarContentView: View {
     private func openLegacySettingsWindow() {
         NSApplication.shared.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
         NSApplication.shared.activate(ignoringOtherApps: true)
+    }
+
+    private func reorderPlayer(_ playerID: Int, at locationY: CGFloat) {
+        if draggedPlayerID != playerID {
+            draggedPlayerID = playerID
+            lastReorderTargetID = nil
+        }
+
+        guard let destinationID = playerFrames.min(by: {
+            abs($0.value.midY - locationY) < abs($1.value.midY - locationY)
+        })?.key else { return }
+
+        if destinationID == playerID {
+            lastReorderTargetID = nil
+            return
+        }
+        guard destinationID != lastReorderTargetID else { return }
+
+        lastReorderTargetID = destinationID
+        model.movePlayer(playerID, relativeTo: destinationID)
+    }
+
+    private func finishReordering() {
+        draggedPlayerID = nil
+        lastReorderTargetID = nil
+    }
+}
+
+private struct PlayerFramePreferenceKey: PreferenceKey {
+    static var defaultValue: [Int: CGRect] = [:]
+
+    static func reduce(value: inout [Int: CGRect], nextValue: () -> [Int: CGRect]) {
+        value.merge(nextValue(), uniquingKeysWith: { _, newValue in newValue })
     }
 }

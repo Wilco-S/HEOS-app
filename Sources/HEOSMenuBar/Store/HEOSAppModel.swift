@@ -27,11 +27,13 @@ final class HEOSAppModel: ObservableObject {
         static let port = "heos.port"
         static let reconnect = "heos.reconnect"
         static let disabledPlayers = "heos.disabledPlayers"
+        static let playerOrder = "heos.playerOrder"
     }
 
     private let client: HEOSTCPClient
     private let discovery: HEOSDiscoveryService
     private let defaults: UserDefaults
+    private var playerOrder: [Int]
     private var reconnectTask: Task<Void, Never>?
     private var reconnectAttempt = 0
     private var userDisconnected = false
@@ -53,6 +55,7 @@ final class HEOSAppModel: ObservableObject {
         self.port = savedPort == 0 ? Int(HEOSTCPClient.defaultPort) : savedPort
         self.reconnectAutomatically = defaults.object(forKey: Keys.reconnect) as? Bool ?? true
         self.disabledPlayerIDs = Set(defaults.array(forKey: Keys.disabledPlayers) as? [Int] ?? [])
+        self.playerOrder = defaults.array(forKey: Keys.playerOrder) as? [Int] ?? []
 
         client.onStateChange = { [weak self] state in self?.handle(state: state) }
         client.onResponse = { [weak self] response in self?.handle(response: response) }
@@ -141,6 +144,47 @@ final class HEOSAppModel: ObservableObject {
         }
     }
 
+    func movePlayer(_ playerID: Int, relativeTo destinationID: Int) {
+        let currentIDs = players.map(\.id)
+        let reorderedIDs = Self.reorderedPlayerIDs(
+            currentIDs,
+            moving: playerID,
+            relativeTo: destinationID
+        )
+        guard reorderedIDs != currentIDs else { return }
+
+        let playersByID = Dictionary(uniqueKeysWithValues: players.map { ($0.id, $0) })
+        players = reorderedIDs.compactMap { playersByID[$0] }
+
+        let visibleIDs = Set(reorderedIDs)
+        playerOrder = reorderedIDs + playerOrder.filter { !visibleIDs.contains($0) }
+        defaults.set(playerOrder, forKey: Keys.playerOrder)
+    }
+
+    static func reorderedPlayerIDs(
+        _ playerIDs: [Int],
+        moving playerID: Int,
+        relativeTo destinationID: Int
+    ) -> [Int] {
+        guard
+            let sourceIndex = playerIDs.firstIndex(of: playerID),
+            let destinationIndex = playerIDs.firstIndex(of: destinationID),
+            sourceIndex != destinationIndex
+        else { return playerIDs }
+
+        var result = playerIDs
+        result.remove(at: sourceIndex)
+        guard let updatedDestinationIndex = result.firstIndex(of: destinationID) else {
+            return playerIDs
+        }
+
+        let insertionIndex = sourceIndex < destinationIndex
+            ? updatedDestinationIndex + 1
+            : updatedDestinationIndex
+        result.insert(playerID, at: insertionIndex)
+        return result
+    }
+
     private func handle(state: HEOSConnectionState) {
         connectionState = state
         switch state {
@@ -177,7 +221,7 @@ final class HEOSAppModel: ObservableObject {
         switch response.heos.command {
         case "player/get_players":
             let oldPlayers = Dictionary(uniqueKeysWithValues: players.map { ($0.id, $0) })
-            players = response.payloadObjects.compactMap(HEOSPlayer.init(payload:)).map { player in
+            var receivedPlayers = response.payloadObjects.compactMap(HEOSPlayer.init(payload:)).map { player in
                 var player = player
                 if let old = oldPlayers[player.id] {
                     player.volume = old.volume
@@ -185,6 +229,16 @@ final class HEOSAppModel: ObservableObject {
                 }
                 return player
             }
+            let newPlayerIDs = receivedPlayers.map(\.id).filter { !playerOrder.contains($0) }
+            if !newPlayerIDs.isEmpty {
+                playerOrder.append(contentsOf: newPlayerIDs)
+                defaults.set(playerOrder, forKey: Keys.playerOrder)
+            }
+            let orderIndex = Dictionary(uniqueKeysWithValues: playerOrder.enumerated().map { ($0.element, $0.offset) })
+            receivedPlayers.sort {
+                orderIndex[$0.id, default: .max] < orderIndex[$1.id, default: .max]
+            }
+            players = receivedPlayers
             if selectedPlayerID == nil || !players.contains(where: {
                 $0.id == selectedPlayerID && isPlayerEnabled($0.id)
             }) {
